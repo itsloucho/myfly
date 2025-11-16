@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
+import { useThemeStore } from '@/lib/store';
 import { Airplane, CalendarCheck, Users, CurrencyDollar } from '@phosphor-icons/react/dist/ssr';
 
 interface Stats {
@@ -14,6 +15,7 @@ interface Stats {
 export default function AccueilPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const { isDark } = useThemeStore();
 
   useEffect(() => {
     fetchStats();
@@ -32,13 +34,13 @@ export default function AccueilPage() {
 
   const statCards = [
     {
-      title: 'Voyages',
+      title: 'Trips',
       value: stats?.total_reservations || 0,
       icon: Airplane,
       color: '#8A77ED',
     },
     {
-      title: 'Total Réservations',
+      title: 'Total Bookings',
       value: stats?.confirmed_reservations || 0,
       icon: CalendarCheck,
       color: '#10B981',
@@ -60,7 +62,7 @@ export default function AccueilPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500 dark:text-gray-400">Loading...</div>
       </div>
     );
   }
@@ -68,8 +70,10 @@ export default function AccueilPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold" style={{ color: '#2B2B2E' }}>Dashboard</h1>
-        <p className="text-gray-600">Welcome back! Here's your overview</p>
+        <h1 className={`text-2xl font-bold ${isDark ? 'text-[#F6F4FF]' : 'text-gray-900'}`}>
+          Dashboard
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">Welcome back! Here's your overview</p>
       </div>
 
       {/* Stats Grid */}
@@ -79,26 +83,31 @@ export default function AccueilPage() {
           return (
             <div
               key={stat.title}
-              className="bg-white p-6 hover:shadow-lg transition-shadow"
+              className={`p-6 hover:shadow-lg transition-shadow rounded-[20px] ${
+                isDark 
+                  ? 'bg-[#3a2f4a] border border-[#3a2f4a]' 
+                  : 'bg-white border border-[#EFF0F6]'
+              }`}
               style={{ 
-                borderRadius: '20px',
-                border: '1px solid #EFF0F6',
-                boxShadow: '0 5px 20px 0 rgba(0, 0, 0, 0.05)'
+                boxShadow: isDark ? '0 5px 20px 0 rgba(0, 0, 0, 0.3)' : '0 5px 20px 0 rgba(0, 0, 0, 0.05)'
               }}
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm mb-1" style={{ color: '#2B2B2E' }}>{stat.title}</p>
-                  <p className="text-2xl font-bold" style={{ color: '#2B2B2E' }}>{stat.value}</p>
+                  <p className={`text-sm mb-1 ${isDark ? 'text-gray-300' : 'text-gray-900'}`}>
+                    {stat.title}
+                  </p>
+                  <p className={`text-2xl font-bold ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>
+                    {stat.value}
+                  </p>
                 </div>
                 <div
-                  className="flex items-center justify-center"
+                  className={`flex items-center justify-center rounded-lg`}
                   style={{ 
-                    backgroundColor: '#F6F4FF',
+                    backgroundColor: isDark ? '#4a3f5a' : '#F6F4FF',
                     minWidth: '34px',
                     minHeight: '34px',
                     padding: '12px',
-                    borderRadius: '8px'
                   }}
                 >
                   <Icon size={16} weight="fill" style={{ color: stat.color }} />
@@ -111,15 +120,19 @@ export default function AccueilPage() {
 
       {/* Chart placeholder */}
       <div 
-        className="bg-white p-6"
+        className={`p-6 rounded-[20px] ${
+          isDark 
+            ? 'bg-[#3a2f4a] border border-[#3a2f4a]' 
+            : 'bg-white border border-[#EFF0F6]'
+        }`}
         style={{ 
-          borderRadius: '20px',
-          border: '1px solid #EFF0F6',
-          boxShadow: '0 5px 20px 0 rgba(0, 0, 0, 0.05)'
+          boxShadow: isDark ? '0 5px 20px 0 rgba(0, 0, 0, 0.3)' : '0 5px 20px 0 rgba(0, 0, 0, 0.05)'
         }}
       >
-        <h2 className="text-lg font-semibold mb-4" style={{ color: '#2B2B2E' }}>Recent Activity</h2>
-        <div className="h-64 flex items-center justify-center text-gray-400">
+        <h2 className={`text-lg font-semibold mb-4 ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>
+          Recent Activity
+        </h2>
+        <div className={`h-64 flex items-center justify-center ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
           <div className="text-center">
             <p>Charts and graphs coming soon</p>
             <p className="text-sm mt-2">Your analytics will be displayed here</p>

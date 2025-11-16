@@ -74,3 +74,41 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 }));
 
+interface ThemeState {
+  isDark: boolean;
+  toggleTheme: () => void;
+  initTheme: () => void;
+}
+
+export const useThemeStore = create<ThemeState>((set) => ({
+  isDark: typeof window !== 'undefined' ? localStorage.getItem('theme') === 'dark' : false,
+  
+  toggleTheme: () => {
+    set((state) => {
+      const newTheme = !state.isDark;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+        if (newTheme) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+      return { isDark: newTheme };
+    });
+  },
+  
+  initTheme: () => {
+    if (typeof window !== 'undefined') {
+      const theme = localStorage.getItem('theme') || 'light';
+      const isDark = theme === 'dark';
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      set({ isDark });
+    }
+  },
+}));
+

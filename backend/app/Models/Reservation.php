@@ -18,10 +18,13 @@ class Reservation extends Model
         'customer_email',
         'booking_data',
         'total_amount',
+        'status_history',
+        'admin_note',
     ];
 
     protected $casts = [
         'booking_data' => 'array',
+        'status_history' => 'array',
         'total_amount' => 'decimal:2',
     ];
 

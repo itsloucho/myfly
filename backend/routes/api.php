@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\AgencySettingsController;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -27,6 +29,22 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Reservation management (for agency admins)
     Route::get('/reservations/stats', [ReservationController::class, 'stats']);
+    Route::get('/clients', [ReservationController::class, 'clients']);
+    Route::get('/clients/{id}', [ReservationController::class, 'showClient']);
+    Route::put('/clients/{id}', [ReservationController::class, 'updateClient']);
     Route::apiResource('reservations', ReservationController::class);
+
+    // Users management (owner/admin)
+    Route::middleware('role:agency_admin,admin')->group(function () {
+        Route::get('/users', [UsersController::class, 'index']);
+        Route::post('/users', [UsersController::class, 'store']);
+        Route::patch('/users/{id}', [UsersController::class, 'update']);
+        Route::delete('/users/{id}', [UsersController::class, 'destroy']);
+
+        // Agency settings
+        Route::get('/agency-settings', [AgencySettingsController::class, 'show']);
+        Route::post('/agency-settings', [AgencySettingsController::class, 'update']);
+        Route::post('/agency-logo', [AgencySettingsController::class, 'uploadLogo']);
+    });
 });
 

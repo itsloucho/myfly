@@ -101,12 +101,6 @@ export default function LoginPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {activeTab === 'signup' && (
-              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 text-blue-700 rounded-md text-sm">
-                <strong>Note:</strong> Registration is for agency administrators only. End customers can book trips directly without creating an account.
-              </div>
-            )}
-
             <div>
               <label htmlFor="email" className="block text-sm font-medium mb-1" style={{ color: '#2B2B2E' }}>
                 Email
